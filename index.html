@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Sobre Sellado</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080c;
+  --surface: #10101a;
+  --indigo: #2a1a5a;
+  --violet: #6a3a9a;
+  --lavender: #b090d8;
+  --cream: #f0ecf8;
+  --muted: #6a5a80;
+  --gold: #c9a96e;
+  --deep: #08080c;
+  --rose: #c4506a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--cream); font-family:'Cormorant Garamond',serif; min-height:100vh; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events:none; z-index:999; opacity:0.5; }
+
+/* COVER */
+#cover { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 24px; text-align:center; background:radial-gradient(ellipse at 50% 20%, #1a0a3a 0%, #0c0818 55%, var(--bg) 100%); position:relative; }
+#cover::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 20% 80%, rgba(106,58,154,0.12) 0%, transparent 55%); pointer-events:none; }
+.cover-badge { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.4em; text-transform:uppercase; color:var(--muted); border:1px solid rgba(106,58,154,0.3); padding:6px 20px; margin-bottom:48px; display:inline-block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.2s forwards; }
+.cover-icon { font-size:48px; margin-bottom:24px; position:relative; z-index:1; opacity:0; animation:fadeIn 0.8s ease 0.4s forwards; }
+.cover-title { font-family:'Playfair Display',serif; font-size:clamp(44px,14vw,96px); font-weight:700; color:var(--cream); line-height:0.9; letter-spacing:-2px; display:block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.6s forwards; }
+.cover-title2 { font-family:'Playfair Display',serif; font-size:clamp(28px,8vw,56px); font-weight:400; font-style:italic; color:var(--lavender); display:block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.8s forwards; margin-bottom:8px; }
+.cover-line { width:1px; height:60px; background:linear-gradient(to bottom, transparent, var(--violet), transparent); margin:28px auto; opacity:0; animation:fadeIn 1s ease 1.2s forwards; }
+.cover-desc { font-size:clamp(15px,4vw,19px); font-style:italic; color:rgba(240,236,248,0.45); max-width:320px; line-height:1.8; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 1.4s forwards; margin-bottom:48px; }
+.cover-pills { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:40px; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 1.5s forwards; }
+.cover-pill { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; padding:5px 12px; border:1px solid rgba(106,58,154,0.3); color:var(--muted); }
+.cover-btn { background:transparent; border:1px solid var(--violet); color:var(--cream); font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; padding:16px 40px; cursor:pointer; transition:all 0.3s; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 1.7s forwards; }
+.cover-btn:hover { background:var(--violet); color:var(--cream); }
+
+/* SOBRE SCREEN */
+#sobres { display:none; min-height:100vh; flex-direction:column; background:var(--bg); padding:32px 24px 48px; }
+.sec-tag { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.4em; color:var(--violet); text-transform:uppercase; display:block; margin-bottom:8px; }
+.sec-title { font-family:'Playfair Display',serif; font-size:clamp(26px,7vw,42px); color:var(--cream); font-weight:700; margin-bottom:8px; line-height:1.1; }
+.sec-sub { font-size:15px; font-style:italic; color:var(--muted); line-height:1.6; margin-bottom:28px; }
+
+.sobre-grid { display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+.sobre-item { background:rgba(255,255,255,0.03); border:1px solid rgba(106,58,154,0.2); display:flex; align-items:center; gap:0; overflow:hidden; cursor:pointer; transition:all 0.2s; }
+.sobre-item:hover { border-color:var(--violet); background:rgba(106,58,154,0.06); }
+.sobre-item.abierto { border-color:var(--gold); background:rgba(201,169,110,0.06); }
+.sobre-left { background:rgba(106,58,154,0.12); padding:20px 16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-width:64px; border-right:1px solid rgba(106,58,154,0.15); }
+.sobre-num { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--muted); }
+.sobre-icon { font-size:20px; }
+.sobre-body { flex:1; padding:16px 18px; }
+.sobre-categoria { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--violet); margin-bottom:6px; display:block; }
+.sobre-titulo { font-family:'Playfair Display',serif; font-size:17px; font-style:italic; color:var(--cream); margin-bottom:4px; }
+.sobre-estado { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+.sobre-item.abierto .sobre-estado { color:var(--gold); }
+.sobre-arrow { padding:0 16px; color:var(--muted); font-size:14px; }
+
+/* DETAIL */
+#detail { display:none; min-height:100vh; flex-direction:column; background:var(--bg); }
+.detail-header { padding:24px 24px 0; display:flex; align-items:center; gap:16px; }
+.back-btn { background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--muted); font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.15em; padding:10px 16px; cursor:pointer; transition:all 0.2s; }
+.back-btn:hover { border-color:var(--violet); color:var(--cream); }
+.detail-cat { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--violet); }
+.detail-body { flex:1; padding:28px 24px; display:flex; flex-direction:column; }
+.sobre-envelope { background:var(--surface); border:1px solid rgba(106,58,154,0.25); border-top:3px solid var(--violet); padding:28px 22px; margin-bottom:20px; position:relative; }
+.env-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.5em; text-transform:uppercase; color:var(--violet); margin-bottom:16px; display:block; }
+.env-num { position:absolute; top:12px; right:16px; font-family:'Playfair Display',serif; font-size:28px; color:rgba(106,58,154,0.08); line-height:1; }
+.env-title { font-family:'Playfair Display',serif; font-size:clamp(22px,6vw,32px); font-style:italic; color:var(--cream); margin-bottom:16px; line-height:1.3; }
+.env-desc { font-size:clamp(15px,4vw,18px); font-style:italic; color:rgba(240,236,248,0.7); line-height:1.8; margin-bottom:20px; }
+.env-instruccion { background:rgba(106,58,154,0.1); border-left:2px solid var(--violet); padding:14px 16px; }
+.env-inst-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--violet); margin-bottom:8px; display:block; }
+.env-inst-text { font-size:14px; font-style:italic; color:rgba(240,236,248,0.65); line-height:1.7; }
+.env-tiempo { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); border-top:1px solid rgba(106,58,154,0.15); padding-top:12px; margin-top:16px; display:block; }
+
+.detail-actions { display:flex; gap:12px; padding:0 24px 40px; }
+.btn-completar { flex:2; background:var(--violet); border:none; color:var(--cream); font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; padding:16px; cursor:pointer; transition:all 0.2s; }
+.btn-completar:hover { background:#8a4aaa; }
+.btn-completar.done { background:rgba(106,58,154,0.2); border:1px solid var(--violet); color:var(--violet); cursor:default; }
+.btn-volver { flex:1; background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--muted); font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; padding:16px; cursor:pointer; transition:all 0.2s; }
+.btn-volver:hover { border-color:var(--violet); color:var(--cream); }
+
+/* PROGRESS */
+.prog-section { background:rgba(106,58,154,0.06); border:1px solid rgba(106,58,154,0.15); padding:18px 20px; margin-bottom:20px; }
+.prog-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.prog-label { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); }
+.prog-num { font-family:'Space Mono',monospace; font-size:9px; color:var(--lavender); }
+.prog-track { height:2px; background:rgba(255,255,255,0.06); }
+.prog-fill { height:100%; background:linear-gradient(to right, var(--violet), var(--lavender)); transition:width 0.6s ease; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes envOpen { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.env-open { animation:envOpen 0.4s ease forwards; }
+</style>
+</head>
+<body>
+
+<div id="cover">
+  <span class="cover-badge">Solo para ustedes dos</span>
+  <div class="cover-icon">💌</div>
+  <span class="cover-title">EL SOBRE</span>
+  <span class="cover-title2">sellado</span>
+  <div class="cover-line"></div>
+  <p class="cover-desc">7 sobres. 7 deseos que nunca dijeron en voz alta. Esta noche se abren.</p>
+  <div class="cover-pills">
+    <span class="cover-pill">💌 7 sobres</span>
+    <span class="cover-pill">🔥 Deseos reales</span>
+    <span class="cover-pill">✨ Fantasías</span>
+    <span class="cover-pill">💬 Confesiones</span>
+  </div>
+  <button class="cover-btn" onclick="showScreen('sobres')">Abrir los sobres →</button>
+</div>
+
+<div id="sobres">
+  <span class="sec-tag">Esta noche</span>
+  <h2 class="sec-title">Los 7 sobres</h2>
+  <p class="sec-sub">Abran un sobre por turno. Cada uno tiene una instrucción diferente. No lean el siguiente hasta terminar el anterior.</p>
+
+  <div class="prog-section">
+    <div class="prog-row">
+      <span class="prog-label">Sobres abiertos</span>
+      <span class="prog-num" id="prog-num">0 de 7</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="sobre-grid" id="sobre-grid"></div>
+</div>
+
+<div id="detail">
+  <div class="detail-header">
+    <button class="back-btn" onclick="showScreen('sobres')">← Volver</button>
+    <span class="detail-cat" id="detail-cat">—</span>
+  </div>
+  <div class="detail-body">
+    <div class="sobre-envelope env-open" id="detail-envelope">
+      <span class="env-label" id="env-label">—</span>
+      <span class="env-num" id="env-num">—</span>
+      <div class="env-title" id="env-title">—</div>
+      <div class="env-desc" id="env-desc">—</div>
+      <div class="env-instruccion">
+        <span class="env-inst-label">Instrucción</span>
+        <div class="env-inst-text" id="env-inst">—</div>
+      </div>
+      <span class="env-tiempo" id="env-tiempo">—</span>
+    </div>
+  </div>
+  <div class="detail-actions">
+    <button class="btn-volver" onclick="showScreen('sobres')">← Volver</button>
+    <button class="btn-completar" id="btn-completar" onclick="completarSobre()">✓ Sobre cumplido</button>
+  </div>
+</div>
+
+<script>
+const sobres = [
+  {
+    cat:'Confesión íntima',
+    icon:'💬',
+    titulo:'Lo que nunca te animaste a pedir',
+    desc:'Cada uno escribe en un papel lo que más desea que el otro le haga. Sin censura. Sin pensar demasiado. El primero que termina de escribir no puede ver lo que escribe el otro.',
+    inst:'Intercambien los papeles al mismo tiempo. Léanlos en silencio. Luego, sin hablar, decidan juntos cuál cumplen esta noche.',
+    tiempo:'⏱ 5 minutos para escribir · luego toda la noche'
+  },
+  {
+    cat:'Fantasía',
+    icon:'✨',
+    titulo:'La escena que más te excita',
+    desc:'El que abre este sobre cuenta una fantasía completa con el otro como protagonista. Con ambiente, detalles y un final. No es para juzgar — es para conocer.',
+    inst:'El que cuenta, cuenta todo. El otro escucha sin interrumpir. Cuando termine, el otro cuenta la suya. Después deciden si alguna es posible esta noche.',
+    tiempo:'💬 Sin tiempo límite'
+  },
+  {
+    cat:'Deseo directo',
+    icon:'🔥',
+    titulo:'Una noche tuya',
+    desc:'El que abre este sobre tiene el control absoluto de la próxima hora. Decide qué pasa, cómo pasa y cuándo para. El otro acepta todo — dentro de lo que ambos quieren.',
+    inst:'El que manda lo dice en voz alta: "Esta hora es mía." A partir de ese momento, sus reglas. La única regla del otro: decir qué no quiere antes de que empiece.',
+    tiempo:'⏱ 60 minutos'
+  },
+  {
+    cat:'Exploración',
+    icon:'🗺️',
+    titulo:'El lugar que nunca usamos',
+    desc:'Elijan un lugar de su casa donde nunca estuvieron juntos de esta manera. Puede ser el balcón, el baño, la cocina, el piso de la sala. El lugar lo elige el que abre el sobre.',
+    inst:'Sin preparación. Agarren algo para tomar, vayan al lugar y quédense ahí al menos 30 minutos.',
+    tiempo:'⏱ Mínimo 30 minutos'
+  },
+  {
+    cat:'Confesión',
+    icon:'💌',
+    titulo:'Lo que te paraliza de mí',
+    desc:'Cada uno dice en voz alta y con detalle qué cosa específica del otro lo/la detiene en seco — en el buen sentido. Qué gesto, qué mirada, qué palabra, qué movimiento.',
+    inst:'Primero habla el que abre el sobre. Después el otro. Sean específicos — no vale "me gustás mucho". Vale "cuando hacés X, no puedo pensar en nada más".',
+    tiempo:'💬 Sin apuro'
+  },
+  {
+    cat:'Sin reglas',
+    icon:'🔓',
+    titulo:'La pregunta que siempre quisiste hacer',
+    desc:'Cada uno hace la pregunta íntima que siempre quiso hacer y nunca se animó. La que da más vergüenza. La que guardaron porque no sabían cómo iba a reaccionar el otro.',
+    inst:'Primero pregunta el que abre el sobre. El otro responde con honestidad total. Luego cambian. No hay respuesta incorrecta — solo honesta.',
+    tiempo:'💬 Esta noche todo se puede preguntar'
+  },
+  {
+    cat:'El séptimo sobre',
+    icon:'🌙',
+    titulo:'Esto lo eligen ustedes',
+    desc:'El último sobre está en blanco. Es el deseo que ninguno de los dos dijo esta noche — el que quedó guardado. El que abre este sobre tiene 2 minutos para decidir qué va adentro y decirlo en voz alta.',
+    inst:'No hay instrucción. El séptimo deseo lo escriben ustedes esta noche. Puede ser algo pequeño o algo que cambia todo. Pero tiene que ser real.',
+    tiempo:'✨ Sin límite — es el más importante'
+  }
+];
+
+let abiertos = JSON.parse(localStorage.getItem('sobreSellado') || '[]');
+let currentSobre = 0;
+
+function showScreen(id) {
+  ['cover','sobres','detail'].forEach(s=>{ const el=document.getElementById(s); if(el) el.style.display='none'; });
+  const t=document.getElementById(id);
+  if(t){ t.style.display='flex'; t.style.flexDirection='column'; window.scrollTo(0,0); }
+  if(id==='sobres') renderSobres();
+}
+
+function renderSobres() {
+  const grid=document.getElementById('sobre-grid');
+  grid.innerHTML='';
+  sobres.forEach((s,i)=>{
+    const abierto=abiertos.includes(i);
+    const div=document.createElement('div');
+    div.className='sobre-item'+(abierto?' abierto':'');
+    div.innerHTML=`
+      <div class="sobre-left">
+        <span class="sobre-num">0${i+1}</span>
+        <span class="sobre-icon">${s.icon}</span>
+      </div>
+      <div class="sobre-body">
+        <span class="sobre-categoria">${s.cat}</span>
+        <div class="sobre-titulo">${s.titulo}</div>
+        <span class="sobre-estado">${abierto?'✓ Completado':'Tocar para abrir'}</span>
+      </div>
+      <span class="sobre-arrow">→</span>
+    `;
+    div.onclick=()=>openSobre(i);
+    grid.appendChild(div);
+  });
+  const total=abiertos.length;
+  document.getElementById('prog-num').textContent=`${total} de 7`;
+  document.getElementById('prog-fill').style.width=(total/7*100)+'%';
+}
+
+function openSobre(i) {
+  currentSobre=i;
+  const s=sobres[i];
+  document.getElementById('detail-cat').textContent=s.cat;
+  document.getElementById('env-label').textContent=`— Sobre 0${i+1} de 7 —`;
+  document.getElementById('env-num').textContent=`0${i+1}`;
+  document.getElementById('env-title').textContent=s.titulo;
+  document.getElementById('env-desc').textContent=s.desc;
+  document.getElementById('env-inst').textContent=s.inst;
+  document.getElementById('env-tiempo').textContent=s.tiempo;
+  const btn=document.getElementById('btn-completar');
+  if(abiertos.includes(i)){ btn.textContent='✓ Ya completado'; btn.className='btn-completar done'; }
+  else { btn.textContent='✓ Sobre cumplido'; btn.className='btn-completar'; }
+  showScreen('detail');
+}
+
+function completarSobre() {
+  if(!abiertos.includes(currentSobre)){
+    abiertos.push(currentSobre);
+    localStorage.setItem('sobreSellado',JSON.stringify(abiertos));
+  }
+  showScreen('sobres');
+}
+</script>
+</body>
+</html>
+
